@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 
 public class GamePanel extends JPanel implements ActionListener
@@ -29,6 +31,11 @@ public class GamePanel extends JPanel implements ActionListener
 
     ArrayList<Bot> bots = new ArrayList<Bot>();
 
+    int botsEatenByPlayer = 0;
+    double secondsPerBot = 1;
+    Instant startOfGame;
+    Instant currentTime;
+
     public GamePanel()
     {
         player = new Player(WIDTH/2, HEIGHT/2);
@@ -50,6 +57,7 @@ public class GamePanel extends JPanel implements ActionListener
         frame.setVisible(true);
         panel.timer = new Timer(panel.DELAY, panel);
         panel.timer.start();
+        panel.startOfGame = Instant.now();
     }
 
     public void tick()
@@ -93,6 +101,10 @@ public class GamePanel extends JPanel implements ActionListener
             if(c < radiusSum)
             {
                 b.setEaten(true);
+                botsEatenByPlayer++;
+                currentTime = Instant.now();
+                Duration d = Duration.between(startOfGame, currentTime);
+                secondsPerBot = d.getSeconds()/botsEatenByPlayer;
             }
         }
         bots.removeIf(b -> b.isEaten());
@@ -140,6 +152,10 @@ public class GamePanel extends JPanel implements ActionListener
             realY = (int) (b.getY() - b.getRadius());
             g.fillOval(realX, realY, (int) (b.getRadius() * 2), (int) (b.getRadius() * 2));
         }
+        g.setColor(Color.YELLOW);
+        g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+        g.drawString("BOTS EATEN: " + String.valueOf(botsEatenByPlayer), WIDTH - 250, 20);
+        g.drawString("SECOND PER BOT: " + String.valueOf(secondsPerBot), WIDTH - 250, 40);
     }
 
     private class PlayerKeyboardAdapter extends KeyAdapter
