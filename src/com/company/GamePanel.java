@@ -115,5 +115,30 @@ public class GamePanel extends JPanel implements ActionListener
                 left = false;
             }
         }
+
+        @Override
+        public void keyReleased(KeyEvent e)
+        {
+            int key_code = e.getKeyCode();
+            if(key_code == KeyEvent.VK_W)
+            {
+                up = false;
+            }
+
+            if(key_code == KeyEvent.VK_S)
+            {
+                down = false;
+            }
+
+            if(key_code == KeyEvent.VK_A)
+            {
+                left = false;
+            }
+
+            if(key_code == KeyEvent.VK_D)
+            {
+                right = false;
+            }
+        }
     }
 }
