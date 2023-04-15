@@ -56,6 +56,7 @@ public class GamePanel extends JPanel implements ActionListener
     {
         spawnBot();
         checkPlayerBotCollision();
+        limitPlayerOnMap();
         if(up)
         {
             player.setY(player.getY() - MOVE_PER_TICK);
@@ -95,6 +96,26 @@ public class GamePanel extends JPanel implements ActionListener
             }
         }
         bots.removeIf(b -> b.isEaten());
+    }
+
+    public void limitPlayerOnMap()
+    {
+        if(player.getX() > WIDTH)
+        {
+            player.setX(WIDTH);
+        }
+        if(player.getX() < 0)
+        {
+            player.setX(0);
+        }
+        if(player.getY() > HEIGHT)
+        {
+            player.setY(HEIGHT);
+        }
+        if(player.getY() < 0)
+        {
+            player.setY(0);
+        }
     }
     @Override
     public void actionPerformed(ActionEvent e)
