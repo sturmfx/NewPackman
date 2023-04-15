@@ -46,7 +46,18 @@ public class Bot
         return radius;
     }
 
-    public void setRadius(double radius) {
+    public void setRadius(double radius)
+    {
         this.radius = radius;
+    }
+
+    public boolean isEaten()
+    {
+        return eaten;
+    }
+
+    public void setEaten(boolean eaten)
+    {
+        this.eaten = eaten;
     }
 }

@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 
 public class GamePanel extends JPanel implements ActionListener
 {
@@ -13,6 +14,7 @@ public class GamePanel extends JPanel implements ActionListener
     int HEIGHT = 750;
     int DELAY = 20;
     double MOVE_PER_TICK = 5;
+    int MAX_BOTS_ON_ANY_MOMENT = 3;
 
     boolean up = false;
     boolean down = false;
@@ -24,6 +26,8 @@ public class GamePanel extends JPanel implements ActionListener
     Color backgroundColor = Color.BLACK;
 
     Player player;
+
+    ArrayList<Bot> bots = new ArrayList<Bot>();
 
     public GamePanel()
     {
@@ -50,6 +54,8 @@ public class GamePanel extends JPanel implements ActionListener
 
     public void tick()
     {
+        spawnBot();
+        checkPlayerBotCollision();
         if(up)
         {
             player.setY(player.getY() - MOVE_PER_TICK);
@@ -67,6 +73,29 @@ public class GamePanel extends JPanel implements ActionListener
             player.setX(player.getX() - MOVE_PER_TICK);
         }
     }
+
+    public void spawnBot()
+    {
+        if(bots.size() < 3)
+        {
+            Bot b1 = Bot.createBot(WIDTH, HEIGHT, 10);
+            bots.add(b1);
+        }
+    }
+
+    public void checkPlayerBotCollision()
+    {
+        for(Bot b : bots)
+        {
+            double c = Math.sqrt((player.getX() - b.getX())*(player.getX() - b.getX()) + (player.getY() - b.getY())*(player.getY() - b.getY()));
+            double radiusSum = player.getWidth()/2 + b.getRadius();
+            if(c < radiusSum)
+            {
+                b.setEaten(true);
+            }
+        }
+        bots.removeIf(b -> b.isEaten());
+    }
     @Override
     public void actionPerformed(ActionEvent e)
     {
@@ -82,6 +111,14 @@ public class GamePanel extends JPanel implements ActionListener
         int realX = (int) (player.getX() - player.getWidth()/2);
         int realY = (int) (player.getY() - player.getHeight()/2);
         g.fillOval(realX, realY, player.getWidth(), player.getHeight());
+
+        for(Bot b : bots)
+        {
+            g.setColor(b.color);
+            realX = (int) (b.getX() - b.getRadius());
+            realY = (int) (b.getY() - b.getRadius());
+            g.fillOval(realX, realY, (int) (b.getRadius() * 2), (int) (b.getRadius() * 2));
+        }
     }
 
     private class PlayerKeyboardAdapter extends KeyAdapter
