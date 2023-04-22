@@ -9,6 +9,7 @@ import java.awt.event.KeyEvent;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class GamePanel extends JPanel implements ActionListener
 {
@@ -24,6 +25,7 @@ public class GamePanel extends JPanel implements ActionListener
     boolean right = false;
 
     Timer timer;
+    Random rand = new Random();
 
     Color backgroundColor = Color.BLACK;
 
@@ -96,7 +98,24 @@ public class GamePanel extends JPanel implements ActionListener
     {
         if(bots.size() < 3)
         {
-            Bot b1 = Bot.createBot(WIDTH, HEIGHT, 10);
+            boolean controller = true;
+            int x = 0;
+            int y = 0;
+            Bot b1 = null;
+            while(controller)
+            {
+                x = rand.nextInt(WIDTH);
+                y = rand.nextInt(HEIGHT);
+                for(Rectangle1 r1: rec1)
+                {
+                    if(!(r1.p2.getX() > x && r1.p1.getX() < x && r1.p3.getY() < y && r1.p2.getY() > y))
+                    {
+                        controller = false;
+                        break;
+                    }
+                }
+            }
+            b1 = new Bot(x, y, 10);
             bots.add(b1);
         }
     }
