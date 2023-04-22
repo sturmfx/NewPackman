@@ -36,7 +36,7 @@ public class GamePanel extends JPanel implements ActionListener
     Instant startOfGame;
     Instant currentTime;
 
-    Rectangle1 rec1;
+    ArrayList<Rectangle1> rec1;
 
     public GamePanel()
     {
@@ -56,7 +56,8 @@ public class GamePanel extends JPanel implements ActionListener
 
         JFrame frame = new JFrame();
         GamePanel panel = new GamePanel();
-        panel.rec1 = new Rectangle1(l1, l2, l3, l4);
+        panel.rec1 = new ArrayList<Rectangle1>();
+        panel.rec1.add(new Rectangle1(l1, l2, l3, l4));
         frame.add(panel);
         frame.setTitle("PACKMAN");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -73,19 +74,19 @@ public class GamePanel extends JPanel implements ActionListener
         spawnBot();
         checkPlayerBotCollision();
         limitPlayerOnMap();
-        if(up)
+        if(up && !Geometry.intersectsCircleWithEdges(rec1.get(0).p1,rec1.get(0).p2, rec1.get(0).p3, rec1.get(0).p4, new Point(player.getX(), player.getY() - MOVE_PER_TICK), player.getWidth()/2))
         {
             player.setY(player.getY() - MOVE_PER_TICK);
         }
-        if(down)
+        if(down && !Geometry.intersectsCircleWithEdges(rec1.get(0).p1,rec1.get(0).p2, rec1.get(0).p3, rec1.get(0).p4, new Point(player.getX(), player.getY() + MOVE_PER_TICK), player.getWidth()/2))
         {
             player.setY(player.getY() + MOVE_PER_TICK);
         }
-        if(right)
+        if(right && !Geometry.intersectsCircleWithEdges(rec1.get(0).p1,rec1.get(0).p2, rec1.get(0).p3, rec1.get(0).p4, new Point(player.getX() + MOVE_PER_TICK, player.getY()), player.getWidth()/2))
         {
             player.setX(player.getX() + MOVE_PER_TICK);
         }
-        if(left)
+        if(left && !Geometry.intersectsCircleWithEdges(rec1.get(0).p1,rec1.get(0).p2, rec1.get(0).p3, rec1.get(0).p4, new Point(player.getX() - MOVE_PER_TICK, player.getY()), player.getWidth()/2))
         {
             player.setX(player.getX() - MOVE_PER_TICK);
         }
@@ -150,7 +151,7 @@ public class GamePanel extends JPanel implements ActionListener
         super.paintComponent(g);
 
         g.setColor(Color.WHITE);
-        g.drawRect((int)rec1.p1.getX(),(int)rec1.p1.getY(),(int)(rec1.p2.getX()-rec1.p1.getX()),(int)(rec1.p3.getY()-rec1.p2.getY()));
+        g.fillRect((int)rec1.get(0).p1.getX(),(int)rec1.get(0).p1.getY(),(int)(rec1.get(0).p2.getX()-rec1.get(0).p1.getX()),(int)(rec1.get(0).p3.getY()-rec1.get(0).p2.getY()));
         g.setColor(player.color);
         int realX = (int) (player.getX() - player.getWidth()/2);
         int realY = (int) (player.getY() - player.getHeight()/2);
