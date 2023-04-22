@@ -36,6 +36,8 @@ public class GamePanel extends JPanel implements ActionListener
     Instant startOfGame;
     Instant currentTime;
 
+    Rectangle1 rec1;
+
     public GamePanel()
     {
         player = new Player(WIDTH/2, HEIGHT/2);
@@ -47,8 +49,14 @@ public class GamePanel extends JPanel implements ActionListener
 
     public static void main(String[] args)
     {
+        Point l1 = new Point(250, 200);
+        Point l2 = new Point(350, 200);
+        Point l3 = new Point(350, 600);
+        Point l4 = new Point(250, 600);
+
         JFrame frame = new JFrame();
         GamePanel panel = new GamePanel();
+        panel.rec1 = new Rectangle1(l1, l2, l3, l4);
         frame.add(panel);
         frame.setTitle("PACKMAN");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -140,6 +148,9 @@ public class GamePanel extends JPanel implements ActionListener
     protected void paintComponent(Graphics g)
     {
         super.paintComponent(g);
+
+        g.setColor(Color.WHITE);
+        g.drawRect((int)rec1.p1.getX(),(int)rec1.p1.getY(),(int)(rec1.p2.getX()-rec1.p1.getX()),(int)(rec1.p3.getY()-rec1.p2.getY()));
         g.setColor(player.color);
         int realX = (int) (player.getX() - player.getWidth()/2);
         int realY = (int) (player.getY() - player.getHeight()/2);
