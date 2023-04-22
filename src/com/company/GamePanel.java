@@ -104,7 +104,7 @@ public class GamePanel extends JPanel implements ActionListener
                 botsEatenByPlayer++;
                 currentTime = Instant.now();
                 Duration d = Duration.between(startOfGame, currentTime);
-                secondsPerBot = d.getSeconds()/botsEatenByPlayer;
+                secondsPerBot = (double) d.getSeconds() /botsEatenByPlayer;
             }
         }
         bots.removeIf(b -> b.isEaten());
